@@ -8,9 +8,9 @@ public class EnemyDeathAnimation : MonoBehaviour
 	//アニメーションが終了しましたよという関数
 	public void OnCompleteAnimation () 
 	{
-		Debug.Log("OnCompleteAnimation");
+		//Debug.Log("OnCompleteAnimation");
 		Destroy (this.gameObject); //アニメーションが終了したら自分自身を破壊しなさいという意味
-		Debug.Log(this.gameObject);
+		//Debug.Log(this.gameObject);
 	}
 	   
 }

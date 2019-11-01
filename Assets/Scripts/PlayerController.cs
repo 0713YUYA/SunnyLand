@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 	//SE
 	[SerializeField] AudioClip getItemSE;
 	[SerializeField] AudioClip jumpSE;
-	[SerializeField] AudioClip satmpSE;
+	[SerializeField] AudioClip stampSE;
 	AudioSource audioSource;
 
 	public enum MOVE_DIRECTION
@@ -163,7 +163,7 @@ public class PlayerController : MonoBehaviour
 				//Enemyが消える
 				enemy.DestroyEnemy();
 				//Debug.Log("enemy.DestroyEnemy"); 
-				audioSource.PlayOneShot(getItemSE);//ジャンプで敵を踏んだら、BGMを鳴らす
+				audioSource.PlayOneShot(stampSE);//ジャンプで敵を踏んだら、BGMを鳴らす
 			}
 			else
 			{

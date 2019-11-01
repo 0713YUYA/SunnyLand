@@ -95,10 +95,10 @@ public class EnemyManager : MonoBehaviour
 	}
 	public void DestroyEnemy()//プレイヤーが敵に当ったら敵が消える。publicはプレイヤーの方から呼び出す
 	{
-		Debug.Log("DestroyEnemy");
+		//Debug.Log("DestroyEnemy");
 		Instantiate (deathEffect, this.transform.position, this.transform.rotation); //Instantiate(意味は生成)
-		Debug.Log("Instantiate");
+		//Debug.Log("Instantiate");
 		Destroy(this.gameObject); //自分自身を破壊しなさいという意味
-		Debug.Log("this.gameObject");
+		//Debug.Log("this.gameObject");
 	}
 }
