@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 	const int MAX_SCORE = 9999; //MAXのスコアを決める
 
 	int score = 0; //スコアの数値
-		
+
 	public void AddScore(int val) //AddScoreはItemManagerで取得する
 	{
 		score += val;
@@ -38,16 +38,17 @@ public class GameManager : MonoBehaviour
 	public void GameClear()
 	{
 		gameClearTextObj.SetActive(true);
-		audioSource.PlayOneShot(clearSE); //
-		Invoke ("ReStartThisScene", 1f); //発動関数
-		ReStartThisScene();
+		audioSource.PlayOneShot(clearSE); //ゲームクリア用のBGMを鳴らす
+		Invoke ("ReStartThisScene", 1.5f); //発動関数
+		//ReStartThisScene(); //このReStartThisScene();を後につける事によって、先に来ている動作の速さが意味を無くす
 	}
 	public void GameOver()
 	{
 		gameOverTextObj.SetActive(true);
-		audioSource.PlayOneShot(overSE); //
-		Invoke ("ReStartThisScene", 1f); //発動関数
-		ReStartThisScene();
+		audioSource.Stop (); //ゲームオーバーの時にBGMを止める(鳴らす順番がある)
+		audioSource.PlayOneShot(overSE); //ゲームオーバー用のBGMを鳴らす
+		Invoke ("ReStartThisScene", 1.5f); //発動関数
+		//ReStartThisScene(); //このReStartThisScene();を後につける事によって、先に来ている動作の速さが意味を無くす
 	}
 
 	void ReStartThisScene()  //リスタートの関数

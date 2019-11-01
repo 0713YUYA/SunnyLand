@@ -14,12 +14,14 @@ public class PlayerController : MonoBehaviour
 
 	Animator animator;     //アニメーション
 
+	bool isDead; //負けたらプレイヤーを動作させないようにする
+
 	bool isGrounded;//着地しているのか判定
 
 	//SE
 	[SerializeField] AudioClip getItemSE;
 	[SerializeField] AudioClip jumpSE;
-	[SerializeField] AudioClip  satmpSE;
+	[SerializeField] AudioClip satmpSE;
 	AudioSource audioSource;
 
 	public enum MOVE_DIRECTION
@@ -40,11 +42,18 @@ public class PlayerController : MonoBehaviour
 
 		audioSource = GetComponent<AudioSource> ();
 
+		isDead = false; //最初は、プレイヤーが死んでいないので
+
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+		//死んだら、何も処理しない
+		if (isDead)
+		{
+			return;
+		}
 		float x = Input.GetAxis("Horizontal");
 		animator.SetFloat("speed", Mathf.Abs (x)); //歩く動作のアニメーション
 		if (x == 0) 
@@ -79,6 +88,12 @@ public class PlayerController : MonoBehaviour
 	}
 	private void FixedUpdate()
 	{
+		//死んだら、何も処理しない
+		if (isDead)
+		{
+			return;
+		}
+
 		switch (moveDirection)
 		{
 		case MOVE_DIRECTION.STOP:
@@ -107,26 +122,65 @@ public class PlayerController : MonoBehaviour
 	}
 	bool IsGround()
 	{
-		return Physics2D.Linecast(transform.position - transform.right * 0.3f,transform.position - transform.up * 0.1f,blockLayer)
-		      || Physics2D.Linecast(transform.position + transform.right * 0.3f,transform.position - transform.up * 0.1f,blockLayer);
+		return Physics2D.Linecast (transform.position - transform.right * 0.3f, transform.position - transform.up * 0.1f, blockLayer)
+		|| Physics2D.Linecast (transform.position + transform.right * 0.3f, transform.position - transform.up * 0.1f, blockLayer);
 	}
-
 	private void OnTriggerEnter2D(Collider2D collision) //オン、トリガーを発動したら
 	{
+		//死んだら、何も処理しない
+		if (isDead)
+		{
+			return;
+		}
+
 		if (collision.gameObject.tag == "Finish") //もし、ぶつかった時のタグがFinishだったら
 		{
  			gameManager.GameClear();
-			Debug.Log ("Finish");
+			//Debug.Log ("Finish"); //スラッシュを外したらデバック確認ができる
 		}
 		if (collision.gameObject.tag == "Trap") //もし、ぶつかった時のタグがGameOverだったら
 		{
-			gameManager.GameOver();
-			Debug.Log ("Trap");
+			PlayerDeath();
+			//Debug.Log ("Trap");   //スラッシュを外したらデバック確認ができる
 		}
 		if (collision.gameObject.tag == "Item") //もし、ぶつかった時のタグがItemだったら
 		{
 			collision.gameObject.GetComponent<ItemManager> ().GetItem (); //GetItem(アイテムの関数を呼ぶ出す)
-			Debug.Log ("GetItem");
+			//Debug.Log ("GetItem");  //スラッシュを外したらデバック確認ができる
+			audioSource.PlayOneShot(getItemSE);//アイテムをとったら、BGMを鳴らす
 		}
+		if (collision.gameObject.tag == "Enemy") //もし、ぶつかった時のタグがGameOverだったら
+	    {
+			EnemyManager enemy = collision.gameObject.GetComponent<EnemyManager> (); //Enemyのコンポーネントを取得
+			//Debug.Log ("Enemy");  //スラッシュを外したらデバック確認ができる
+			//Debug.Log(this.transform.position.y > enemy.transform.position.y); 下のif文のデバック確認
+			if(this.transform.position.y > enemy.transform.position.y)//プレイヤーと敵の位置判定で上で当ったら敵を倒す。もし正面だったらプレイヤーが負ける（プレイヤー側）
+			{
+				//踏んだら
+				//プレイヤーをジャンプさせる
+				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x,0);
+				Jump ();
+				//Enemyが消える
+				enemy.DestroyEnemy();
+				//Debug.Log("enemy.DestroyEnemy"); 
+				audioSource.PlayOneShot(getItemSE);//ジャンプで敵を踏んだら、BGMを鳴らす
+			}
+			else
+			{
+				// 正面からぶつかったらプレイヤーの負け  
+				PlayerDeath();
+			}
+	    }
 	}
+	void PlayerDeath() //プレイヤーがやられた時のアニメーション
+	{
+		isDead = true;//ここにも動作させないように、判定をつける
+		animator.Play("PlayerDeathAnimation");
+		rigidbody2D.velocity = new Vector2(0,0); //プレイヤーが負けたら、速度を０にして、ジャンプさせる
+		Jump ();
+		CapsuleCollider2D capsuleCollider2D = GetComponent<CapsuleCollider2D>(); //プレイヤーが負けたら、落ちたり上がったりする動作
+		Destroy (capsuleCollider2D);
+		gameManager.GameOver();
+	}
+
 }
