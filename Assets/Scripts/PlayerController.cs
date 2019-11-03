@@ -18,6 +18,15 @@ public class PlayerController : MonoBehaviour
 
 	bool isGrounded;//着地しているのか判定
 
+	private bool isLeftButtonDown = false;//左ボタン押下の判定（追加）11/3
+
+	private bool isRightButtonDown = false;//右ボタン押下の判定（追加）11/3
+
+	private bool goJump = false; //ジャンプしたか否か
+
+	//private bool can Jump = false; //ブロックに設置しているか否か
+
+	private bool usingButtons = false; //ボタンを押しているか否か
 	//SE
 	[SerializeField] AudioClip getItemSE;
 	[SerializeField] AudioClip jumpSE;
@@ -29,6 +38,7 @@ public class PlayerController : MonoBehaviour
 		STOP,    
 		RIGHT,   
 		LEFT,
+		JUMP,
 	}
 	MOVE_DIRECTION moveDirection = MOVE_DIRECTION.STOP;
 
@@ -79,7 +89,7 @@ public class PlayerController : MonoBehaviour
 			{
 				Jump ();
 				animator.SetBool ("isJumping", true); //ジャンプ動作をするアニメーション
-				audioSource.PlayOneShot(jumpSE);      //ジャンプした時の効果音
+				audioSource.PlayOneShot(jumpSE);//ジャンプした時の効果音
 			}
 			else {
 				animator.SetBool ("isJumping", false); //ジャンプ動作をしないアニメーション	
@@ -181,6 +191,56 @@ public class PlayerController : MonoBehaviour
 		CapsuleCollider2D capsuleCollider2D = GetComponent<CapsuleCollider2D>(); //プレイヤーが負けたら、落ちたり上がったりする動作
 		Destroy (capsuleCollider2D);
 		gameManager.GameOver();
+	}
+	//左ボタンを押した
+	public void PushLeftButton()
+	{
+		//Debug.Log("PushLeftButton");
+		moveDirection = MOVE_DIRECTION.LEFT;
+		//Debug.Log("LEFT");
+		usingButtons = true;
+		Debug.Log ("true");
+	}
+	//右ボタンを押した
+	public void PushRightButton()
+	{
+		//Debug.Log ("PushRihtButton");
+		moveDirection = MOVE_DIRECTION.RIGHT;
+		//Debug.Log ("RIGHT");
+		usingButtons = true;
+		Debug.Log ("true");
+
+	}
+	//移動ボタンを放した
+	public void ReleaseMoveButton()
+	{
+		//Debug.Log ("ReleaseMoveButton");
+		moveDirection = MOVE_DIRECTION.STOP;
+		//Debug.Log ("STOP");
+		usingButtons = false;
+		Debug.Log ("false");
+	}
+	//ジャンプボタンを押した
+	public void PushJumpButton()
+	{	
+		//Debug.Log("PushjumpButton");
+		moveDirection = MOVE_DIRECTION.JUMP;
+		//Debug.Log("JUMP");
+		goJump = true;
+		Debug.Log ("true");
+		//if (this.transform.position.y < 0.5f)
+		//{
+			//this.Rigidbody2D.AddForce (this.transform.up * this.upForce);
+		//}
+		//プレイヤーを矢印キーまたはボタンに応じて左右に移動させる（追加）
+		//if ((Input.GetKey (KeyCode.LeftArrow) || this.isLeftButtonDown) && -this.movableRange < this.transform.position.x) 
+		//{
+			//左に移動
+			//this.Rigidbody2D.AddForce (-this.turnForce, 0, 0);
+		//} else if ((Input.GetKey (KeyCode.RightArrow) || this.isRightButtonDown) && this.transform.position.x < this.movableRange) {
+			//右に移動
+			//this.Rigidbody2D.AddForce (this.turnForce, 0, 0);
+		//} 
 	}
 
 }

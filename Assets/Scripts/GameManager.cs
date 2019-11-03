@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
 	int score = 0; //スコアの数値
 
+	public int stageNo;  //ステージナンバー
+
 	public void AddScore(int val) //AddScoreはItemManagerで取得する
 	{
 		score += val;
