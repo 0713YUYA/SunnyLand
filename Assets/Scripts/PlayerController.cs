@@ -22,9 +22,11 @@ public class PlayerController : MonoBehaviour
 
 	private bool isRightButtonDown = false;//右ボタン押下の判定（追加）11/3
 
+	private bool pullLeftButton = false;
+
 	private bool goJump = false; //ジャンプしたか否か
 
-	//private bool can Jump = false; //ブロックに設置しているか否か
+	private bool canJump = false; //ブロックに設置しているか否か
 
 	private bool usingButtons = false; //ボタンを押しているか否か
 	//SE
@@ -199,7 +201,9 @@ public class PlayerController : MonoBehaviour
 		moveDirection = MOVE_DIRECTION.LEFT;
 		//Debug.Log("LEFT");
 		usingButtons = true;
-		Debug.Log ("true");
+		//Debug.Log ("true");
+		transform.Translate (-1, 0, 0);
+		Debug.Log ("transform.Translate");
 	}
 	//右ボタンを押した
 	public void PushRightButton()
@@ -208,8 +212,8 @@ public class PlayerController : MonoBehaviour
 		moveDirection = MOVE_DIRECTION.RIGHT;
 		//Debug.Log ("RIGHT");
 		usingButtons = true;
-		Debug.Log ("true");
-
+		//Debug.Log ("true");
+		transform.Translate (1, 0, 0);
 	}
 	//移動ボタンを放した
 	public void ReleaseMoveButton()
@@ -218,7 +222,7 @@ public class PlayerController : MonoBehaviour
 		moveDirection = MOVE_DIRECTION.STOP;
 		//Debug.Log ("STOP");
 		usingButtons = false;
-		Debug.Log ("false");
+		//Debug.Log ("false");
 	}
 	//ジャンプボタンを押した
 	public void PushJumpButton()
@@ -227,13 +231,15 @@ public class PlayerController : MonoBehaviour
 		moveDirection = MOVE_DIRECTION.JUMP;
 		//Debug.Log("JUMP");
 		goJump = true;
-		Debug.Log ("true");
+		//Debug.Log ("true");
+		transform.Translate (1, 0, 0);
 		//if (this.transform.position.y < 0.5f)
 		//{
 			//this.Rigidbody2D.AddForce (this.transform.up * this.upForce);
 		//}
+
 		//プレイヤーを矢印キーまたはボタンに応じて左右に移動させる（追加）
-		//if ((Input.GetKey (KeyCode.LeftArrow) || this.isLeftButtonDown) && -this.movableRange < this.transform.position.x) 
+		//if ((Input.GetKey (KeyCode.LeftArrow) || this.isLeftButtonDown) && -this.moveDirection < this.transform.position.x) 
 		//{
 			//左に移動
 			//this.Rigidbody2D.AddForce (-this.turnForce, 0, 0);
