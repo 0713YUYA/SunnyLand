@@ -631,7 +631,12 @@ MonoBehaviour:
   gameClearTextObj: {fileID: 642856484}
   gameOverTextObj: {fileID: 162084458}
   scoreText: {fileID: 921049969}
-  stageNo: 0
+  stageName:
+  - Title
+  - Stage1
+  - Stage2
+  - Stage3
+  currentstageNo: 0
   clearSE: {fileID: 8300000, guid: c1f73e9b128ee44cb8e3147af0f79e85, type: 3}
   overSE: {fileID: 8300000, guid: bd1d80be26d4742089947b4d0a21c8e8, type: 3}
 --- !u!1 &306480710
@@ -1700,7 +1705,7 @@ GameObject:
   - component: {fileID: 1357058697}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

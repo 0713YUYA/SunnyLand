@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
 	[SerializeField] GameManager gameManager;
 	[SerializeField] LayerMask blockLayer;
-	Rigidbody2D rigidbody2D;
+	Rigidbody2D   rigidbody2D;
 
 	float speed = 0;        //動く時のスピード
 
@@ -29,6 +29,13 @@ public class PlayerController : MonoBehaviour
 	private bool canJump = false; //ブロックに設置しているか否か
 
 	private bool usingButtons = false; //ボタンを押しているか否か
+
+	private float turnForce = 500.0f;
+
+	private float upForce = 500.0f;
+
+	private float movableRange = 3.4f;
+
 	//SE
 	[SerializeField] AudioClip getItemSE;
 	[SerializeField] AudioClip jumpSE;
@@ -202,8 +209,15 @@ public class PlayerController : MonoBehaviour
 		//Debug.Log("LEFT");
 		usingButtons = true;
 		//Debug.Log ("true");
-		transform.Translate (-1, 0, 0);
+		transform.localScale = new Vector3 (-5, 5, 1);
 		Debug.Log ("transform.Translate");
+
+	
+		//if ((Input.GetKey (KeyCode.LeftArrow) || this.isLeftButtonDown) && -this.moveDirection < this.transform.position.x) 
+		//{
+			//左に移動
+			//this.rigidbody2D.AddForce (-this.turnForce, 0, 0);
+		//}
 	}
 	//右ボタンを押した
 	public void PushRightButton()
@@ -213,7 +227,14 @@ public class PlayerController : MonoBehaviour
 		//Debug.Log ("RIGHT");
 		usingButtons = true;
 		//Debug.Log ("true");
-		transform.Translate (1, 0, 0);
+		transform.localScale = new Vector3 (5, 5, 1);
+
+
+	//if ((Input.GetKey (KeyCode.RightArrow) || this.isRightButtonDown) && this.transform.position.x < this.movableRange) 
+		//{
+			//右に移動
+			//this.rigidbody2D.AddForce (this.turnForce, 0, 0);
+	   // } 
 	}
 	//移動ボタンを放した
 	public void ReleaseMoveButton()
@@ -232,21 +253,12 @@ public class PlayerController : MonoBehaviour
 		//Debug.Log("JUMP");
 		goJump = true;
 		//Debug.Log ("true");
-		transform.Translate (1, 0, 0);
-		//if (this.transform.position.y < 0.5f)
-		//{
-			//this.Rigidbody2D.AddForce (this.transform.up * this.upForce);
-		//}
 
-		//プレイヤーを矢印キーまたはボタンに応じて左右に移動させる（追加）
-		//if ((Input.GetKey (KeyCode.LeftArrow) || this.isLeftButtonDown) && -this.moveDirection < this.transform.position.x) 
-		//{
-			//左に移動
-			//this.Rigidbody2D.AddForce (-this.turnForce, 0, 0);
-		//} else if ((Input.GetKey (KeyCode.RightArrow) || this.isRightButtonDown) && this.transform.position.x < this.movableRange) {
-			//右に移動
-			//this.Rigidbody2D.AddForce (this.turnForce, 0, 0);
-		//} 
+		if (this.transform.position.y < 0.5f)
+		{
+			this.rigidbody2D.AddForce (this.transform.up * this.upForce);
+		}
+
 	}
 
 }

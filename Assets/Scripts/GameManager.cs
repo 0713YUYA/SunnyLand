@@ -9,12 +9,16 @@ public class GameManager : MonoBehaviour
 	[SerializeField] GameObject gameClearTextObj;
 	[SerializeField] GameObject gameOverTextObj;
 	[SerializeField] Text scoreText;
+	[SerializeField] string[] stageName; //ステージ名　11/8追加
 
 	const int MAX_SCORE = 9999; //MAXのスコアを決める
 
 	int score = 0; //スコアの数値
 
-	public int stageNo;  //ステージナンバー
+	public int currentstageNo = 0;  //ステージナンバー　11/8数字を追加currentstageと0
+
+
+	GameManager gameManager;//11/8追加
 
 	public void AddScore(int val) //AddScoreはItemManagerで取得する
 	{
@@ -35,13 +39,19 @@ public class GameManager : MonoBehaviour
 		
 	audioSource = GetComponent<AudioSource>();
 
+	gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();//11/8追加
+
+	//シーンを切り替えてもこのゲームオブジェクトを削除しないようにする11/8追加
+	DontDestroyOnLoad(gameObject);
+
     }
 
 	public void GameClear()
 	{
+		//Debug.Log ("GameClear");
 		gameClearTextObj.SetActive(true);
 		audioSource.PlayOneShot(clearSE); //ゲームクリア用のBGMを鳴らす
-		Invoke ("ReStartThisScene", 1.5f); //発動関数
+		Invoke ("NextStatThisScene", 1.5f); //発動関数
 		//ReStartThisScene(); //このReStartThisScene();を後につける事によって、先に来ている動作の速さが意味を無くす
 	}
 	public void GameOver()
@@ -58,4 +68,33 @@ public class GameManager : MonoBehaviour
 		Scene thisScene = SceneManager.GetActiveScene (); //現在のシーンの取得
 		SceneManager.LoadScene (thisScene.name); //シーンをロードする
 	}
+
+	//下のところから追加11/8
+	//次のステージに進む処理
+	public void NextStageThisScene()
+	{
+		Debug.Log ("NextStageThisScene");
+		currentstageNo += 1;
+		//コルーチンを実行
+		StartCoroutine(WaitForLoadScene());
+	}
+
+	//シーンの読み込みと待機を行うコルーチン
+	IEnumerator WaitForLoadScene()
+	{
+		//シーンを非同期で読込し、読み込まれるまで待機する
+		yield return SceneManager.LoadSceneAsync(stageName[currentstageNo]);
+	}
+
+	//プレイヤーが当たり判定に入った時の処理
+	void OnTriggerEnter(Collider other)
+	{
+		Debug.Log ("OntriggerEnter");
+		if(other.gameObject.tag == "Player")
+		{
+			gameManager.NextStageThisScene();
+
+		}
+	}
+
 }
