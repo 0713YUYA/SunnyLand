@@ -24,17 +24,11 @@ public class PlayerController : MonoBehaviour
 
 	private bool pullLeftButton = false;
 
-	private bool goJump = false; //ジャンプしたか否か
-
-	private bool canJump = false; //ブロックに設置しているか否か
-
 	private bool usingButtons = false; //ボタンを押しているか否か
 
-	private float turnForce = 500.0f;
+	private float x = 0f; //（追加）
 
-	private float upForce = 500.0f;
-
-	private float movableRange = 3.4f;
+	private float y = 0.5f; //（追加）
 
 	//SE
 	[SerializeField] AudioClip getItemSE;
@@ -73,8 +67,13 @@ public class PlayerController : MonoBehaviour
 		{
 			return;
 		}
-		float x = Input.GetAxis("Horizontal");
+		//UIボタンから操作していない場合は、キー入力からxの値を取得。（if文を追加）
+		if (!usingButtons)
+		{
+			 x = Input.GetAxis ("Horizontal");
+		}
 		animator.SetFloat("speed", Mathf.Abs (x)); //歩く動作のアニメーション
+
 		if (x == 0) 
 		{
 			//止まる
@@ -91,7 +90,7 @@ public class PlayerController : MonoBehaviour
 			moveDirection = MOVE_DIRECTION.LEFT;
 		}
 		//地面に着地した時
-		if (IsGround ()) 
+		if (IsGround ()&&!usingButtons) 
 		{
 			//スペースキーを押してジャンプする
 			if (Input.GetKeyDown ("space"))
@@ -99,11 +98,12 @@ public class PlayerController : MonoBehaviour
 				Jump ();
 				animator.SetBool ("isJumping", true); //ジャンプ動作をするアニメーション
 				audioSource.PlayOneShot(jumpSE);//ジャンプした時の効果音
-			}
-			else {
-				animator.SetBool ("isJumping", false); //ジャンプ動作をしないアニメーション	
+	        }
+	        
+		  else{ animator.SetBool ("isJumping", false); //ジャンプ動作をしないアニメーション
 			}
 		}
+
 	}
 	private void FixedUpdate()
 	{
@@ -129,7 +129,6 @@ public class PlayerController : MonoBehaviour
 		}
 		rigidbody2D.velocity = new Vector2 (speed, rigidbody2D.velocity.y);
 	}
-
 	void Jump()
 	{
 		//上方向へ力を加える
@@ -204,59 +203,38 @@ public class PlayerController : MonoBehaviour
 	//左ボタンを押した
 	public void PushLeftButton()
 	{
-		//Debug.Log("PushLeftButton");
-		moveDirection = MOVE_DIRECTION.LEFT;
-		//Debug.Log("LEFT");
+		x = -1;
+
 		usingButtons = true;
 		//Debug.Log ("true");
-		transform.localScale = new Vector3 (-5, 5, 1);
-		Debug.Log ("transform.Translate");
 
-	
-		//if ((Input.GetKey (KeyCode.LeftArrow) || this.isLeftButtonDown) && -this.moveDirection < this.transform.position.x) 
-		//{
-			//左に移動
-			//this.rigidbody2D.AddForce (-this.turnForce, 0, 0);
-		//}
 	}
 	//右ボタンを押した
 	public void PushRightButton()
 	{
-		//Debug.Log ("PushRihtButton");
-		moveDirection = MOVE_DIRECTION.RIGHT;
-		//Debug.Log ("RIGHT");
+		x = 1;
+
 		usingButtons = true;
 		//Debug.Log ("true");
-		transform.localScale = new Vector3 (5, 5, 1);
-
-
-	//if ((Input.GetKey (KeyCode.RightArrow) || this.isRightButtonDown) && this.transform.position.x < this.movableRange) 
-		//{
-			//右に移動
-			//this.rigidbody2D.AddForce (this.turnForce, 0, 0);
-	   // } 
 	}
 	//移動ボタンを放した
 	public void ReleaseMoveButton()
 	{
-		//Debug.Log ("ReleaseMoveButton");
-		moveDirection = MOVE_DIRECTION.STOP;
-		//Debug.Log ("STOP");
+		x = 0;
 		usingButtons = false;
 		//Debug.Log ("false");
 	}
 	//ジャンプボタンを押した
 	public void PushJumpButton()
 	{	
-		//Debug.Log("PushjumpButton");
-		moveDirection = MOVE_DIRECTION.JUMP;
-		//Debug.Log("JUMP");
-		goJump = true;
-		//Debug.Log ("true");
-
-		if (this.transform.position.y < 0.5f)
+		//地面に着地した時
+		if (IsGround ()) 
 		{
-			this.rigidbody2D.AddForce (this.transform.up * this.upForce);
+		Debug.Log("PushJumpButton");
+		usingButtons = true;
+		Jump ();
+		animator.SetBool ("isJumping", true); //ジャンプ動作をするアニメーション
+		audioSource.PlayOneShot(jumpSE);//ジャンプした時の効果音
 		}
 
 	}

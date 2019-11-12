@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 	gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();//11/8追加
 
 	//シーンを切り替えてもこのゲームオブジェクトを削除しないようにする11/8追加
-	DontDestroyOnLoad(gameObject);
+	//DontDestroyOnLoad(gameObject);
 
     }
 
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 		//Debug.Log ("GameClear");
 		gameClearTextObj.SetActive(true);
 		audioSource.PlayOneShot(clearSE); //ゲームクリア用のBGMを鳴らす
-		Invoke ("NextStatThisScene", 1.5f); //発動関数
+		Invoke ("StageSelect", 1.5f); //発動関数
 		//ReStartThisScene(); //このReStartThisScene();を後につける事によって、先に来ている動作の速さが意味を無くす
 	}
 	public void GameOver()
@@ -59,15 +59,21 @@ public class GameManager : MonoBehaviour
 		gameOverTextObj.SetActive(true);
 		audioSource.Stop (); //ゲームオーバーの時にBGMを止める(鳴らす順番がある)
 		audioSource.PlayOneShot(overSE); //ゲームオーバー用のBGMを鳴らす
-		Invoke ("ReStartThisScene", 1.5f); //発動関数
+		Invoke ("StageSelect", 1.5f); //発動関数
 		//ReStartThisScene(); //このReStartThisScene();を後につける事によって、先に来ている動作の速さが意味を無くす
 	}
 
-	void ReStartThisScene()  //リスタートの関数
+	void StageSelect()  //リスタートの関数
 	{
-		Scene thisScene = SceneManager.GetActiveScene (); //現在のシーンの取得
-		SceneManager.LoadScene (thisScene.name); //シーンをロードする
+	   SceneManager.LoadScene ("StageSelect"); //シーンをロードする
 	}
+
+
+	//void ReStartThisScene()  //リスタートの関数
+	//{
+		//Scene thisScene = SceneManager.GetActiveScene (); //現在のシーンの取得
+		//SceneManager.LoadScene (thisScene.name); //シーンをロードする
+	//}
 
 	//下のところから追加11/8
 	//次のステージに進む処理

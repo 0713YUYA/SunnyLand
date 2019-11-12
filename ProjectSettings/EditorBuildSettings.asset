@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Title.unity
     guid: 07dfe73fbccc241e5af52e1ca471e7be
   - enabled: 1
+    path: Assets/StageSelect.unity
+    guid: 144d8c7c784744e7499f11625c64338d
+  - enabled: 1
     path: Assets/Stage1.unity
     guid: bff66ef4a5a214b7a933cb1fa5e1e0fb
   - enabled: 1

@@ -9,7 +9,7 @@ public class ButtonController : MonoBehaviour
 
 	public void PushAAAButton()
 	{
-		SceneManager.LoadScene ("Stage1");
+		SceneManager.LoadScene ("StageSelect");
 		//Debug.Log("ボタンが押されました。");
 	}
 	// Update is called once per frame
@@ -17,13 +17,5 @@ public class ButtonController : MonoBehaviour
 	{
 		
 	}
-     public void GameClear()
-    {
-		Debug.Log ("GameClear");
-		if (Input.GetKeyDown ("space"))
-		{
-
-			SceneManager.LoadScene ("Scene_Stage2");
-		}
-    }
+    
 }
