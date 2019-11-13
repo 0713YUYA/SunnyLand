@@ -18,15 +18,18 @@ public class SelectButtonController : MonoBehaviour
 		     //Debug.Log ("transform.name");
 			case  "ButtonStage1":
 			Debug.Log ("ButtonStage1");
-			//SelectButtonClick.WriteLine("Stage1");
+			SceneManager.LoadScene ("Stage1");
+			//Debug.Log("ボタンが押されました。");
 				break;
 			case  "ButtonStage2":
 			Debug.Log("ButtonStage2");
-			//SelectButtonClick.WriteLine("Stage2");
+			SceneManager.LoadScene ("Stage2");
+			//Debug.Log("ボタンが押されました。");
 				break;
 			case  "ButtonStage3":
 			Debug.Log("ButtonStage3");
-			//SelectButtonClick.WriteLine("Stage3");
+			SceneManager.LoadScene ("Stage3");
+			//Debug.Log("ボタンが押されました。");
 				break;
 			default:
 				break;
