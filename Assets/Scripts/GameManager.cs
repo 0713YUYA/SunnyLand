@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
 	int score = 0; //スコアの数値
 
-	public int currentstageNo = 0;  //ステージナンバー　11/8数字を追加currentstageと0
+	public int CurrentstageNo = 0;  //ステージナンバー　11/8数字を追加currentstageと0
 
 
 	GameManager gameManager;//11/8追加
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 		//ReStartThisScene(); //このReStartThisScene();を後につける事によって、先に来ている動作の速さが意味を無くす
 	}
 
-	void StageSelect()  //リスタートの関数
+	void StageSelect()  //ステージセレクトの関数
 	{
 	   SceneManager.LoadScene ("StageSelect"); //シーンをロードする
 	}
@@ -75,32 +75,6 @@ public class GameManager : MonoBehaviour
 		//SceneManager.LoadScene (thisScene.name); //シーンをロードする
 	//}
 
-	//下のところから追加11/8
-	//次のステージに進む処理
-	public void NextStageThisScene()
-	{
-		Debug.Log ("NextStageThisScene");
-		currentstageNo += 1;
-		//コルーチンを実行
-		StartCoroutine(WaitForLoadScene());
-	}
 
-	//シーンの読み込みと待機を行うコルーチン
-	IEnumerator WaitForLoadScene()
-	{
-		//シーンを非同期で読込し、読み込まれるまで待機する
-		yield return SceneManager.LoadSceneAsync(stageName[currentstageNo]);
-	}
-
-	//プレイヤーが当たり判定に入った時の処理
-	void OnTriggerEnter(Collider other)
-	{
-		Debug.Log ("OntriggerEnter");
-		if(other.gameObject.tag == "Player")
-		{
-			gameManager.NextStageThisScene();
-
-		}
-	}
 
 }
