@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
-		
+       // Debug.Log("Start");
 	audioSource = GetComponent<AudioSource>();
 
 	gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();//11/8追加
